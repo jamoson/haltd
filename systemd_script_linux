@@ -1,0 +1,15 @@
+#!/bin/bash
+# Shut down virtual Plan 9 machines.
+# E.g. put in /usr/lib/systemd/system-shutdown
+#
+# $1 is [poweroff|halt|reboot|kexec]
+# Only poweroff will be sent to haltd as 'halt'
+# The sleep after echo is needed not to shut down
+# the connection to quickly.
+#
+# 2019-01-13 jam
+
+if [ $1 = poweroff ]
+then
+	(echo halt; sleep 1) | telnet 192.168.20.40 5000
+fi

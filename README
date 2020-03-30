@@ -1,0 +1,46 @@
+The hald package contains two daemons, haltd and batteryd.
+
+haltd		listens to a network port, and accepts the commands
+		halt, shutdown, reboot and help.
+		This can be used to remotely shut down a plan 9
+		from another machine. For example systemd on Linux
+		can shut down plan 9 machines.
+		Default port: 5000
+
+ 
+batteryd	Monitors the battery status of a laptop,
+		issuing a shutdown if the charge falls
+		below a limit (mA) - default 5 mA.
+
+		In order to really shut down the machine,
+		and avoiding the battery to be completely
+		drained, check that the command 'fshalt'
+		shuts off the machine. You might have to
+		add the line *acpi=1 in plan9.ini.
+
+Both daemons write to the logfile: /sys/log/haltd.
+
+Compile and install:
+
+mk install
+
+Note that you need system privilieges to install.
+
+# Automatic start of the deamons
+# the daemons can be started on booting by adding the
+following lines to /cfg/$sysname/cpustart (or termrc).
+
+aux/acpi
+haltd &
+batteryd &
+
+Create the directory /cfg/$sysname if it doesn't exist,
+and make the file (cpustart or termrc) executable.
+For laptops, you might only want to run batteryd and for
+servers only haltd.
+
+Installation on Linux: (for using with haltd):
+
+Put the Linuxscript in /usr/lib/systemd/system-shutdown
+(it can have any name, but should be executable)
+
